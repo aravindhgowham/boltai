@@ -1,11 +1,14 @@
-import { Clock, MapPin, Calendar, DollarSign, Users, Film } from 'lucide-react';
-import { MovieInfo } from '../types/api';
+import { useNavigate } from 'react-router-dom';
+import { Clock, MapPin, Film, DollarSign, Tag, Zap } from 'lucide-react';
+import { MovieShowResult } from '../types/api';
 
 interface OutputPanelProps {
-  data: MovieInfo[];
+  data: MovieShowResult[];
 }
 
 export default function OutputPanel({ data }: OutputPanelProps) {
+  const navigate = useNavigate();
+
   if (data.length === 0) {
     return (
       <div className="h-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-6">
@@ -28,125 +31,100 @@ export default function OutputPanel({ data }: OutputPanelProps) {
     <div className="h-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-y-auto">
       <div className="p-6">
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-white mb-2">Movie Details</h2>
+          <h2 className="text-2xl font-bold text-white mb-2">Available Shows</h2>
           <p className="text-slate-400 text-sm">
-            Showing {data.length} {data.length === 1 ? 'result' : 'results'}
+            {data.length} {data.length === 1 ? 'show' : 'shows'} found · Click to view details
           </p>
         </div>
 
         <div className="space-y-4">
-          {data.map((movie, index) => (
-            <div
-              key={index}
-              className="bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-xl overflow-hidden hover:border-red-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-red-500/10"
-            >
-              <div className="p-6 space-y-4">
-                {movie.movie_name && (
-                  <div className="flex items-start gap-3">
-                    <div className="p-2 bg-gradient-to-br from-red-600 to-red-700 rounded-lg shadow-lg flex-shrink-0">
-                      <Film className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-xl font-bold text-white mb-1">{movie.movie_name}</h3>
-                      {movie.language && (
-                        <span className="inline-block px-3 py-1 bg-slate-700/50 text-slate-300 text-xs font-medium rounded-full">
-                          {movie.language}
+          {data.map((movie, index) => {
+            const posterUrl = movie.movie_poster_url || movie.movie_poster_local;
+
+            return (
+              <button
+                key={index}
+                onClick={() =>
+                  navigate(`/movie/${index}`, {
+                    state: { movie },
+                  })
+                }
+                className="w-full text-left group"
+              >
+                <div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-xl overflow-hidden hover:border-red-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-red-500/20 hover:scale-[1.02]">
+                  <div className="flex gap-4 p-4">
+                    {posterUrl && (
+                      <div className="flex-shrink-0 w-24 h-32 rounded-xl overflow-hidden bg-slate-700">
+                        <img
+                          src={posterUrl}
+                          alt={movie.movie_name}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                          }}
+                        />
+                      </div>
+                    )}
+
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg font-bold text-white mb-2 truncate group-hover:text-red-400 transition-colors">
+                        {movie.movie_name}
+                      </h3>
+
+                      <div className="space-y-2 mb-3">
+                        <div className="flex items-center gap-2 text-sm text-slate-400">
+                          <MapPin className="w-4 h-4 text-red-500 flex-shrink-0" />
+                          <span className="truncate">{movie.theater_name}</span>
+                        </div>
+
+                        <div className="flex items-center gap-2 text-sm text-slate-400">
+                          <Clock className="w-4 h-4 text-red-500 flex-shrink-0" />
+                          <span>{movie.showtime}</span>
+                        </div>
+
+                        <div className="flex items-center gap-2 text-sm text-slate-400">
+                          <DollarSign className="w-4 h-4 text-red-500 flex-shrink-0" />
+                          <span className="font-semibold">{movie.price}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs font-medium rounded-full">
+                          {movie.movie_language}
                         </span>
-                      )}
-                    </div>
-                  </div>
-                )}
+                        <span className="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs font-medium rounded-full">
+                          {movie.screen_type}
+                        </span>
+                        <span className="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs font-medium rounded-full">
+                          {movie.category}
+                        </span>
 
-                {movie.theater_name && (
-                  <div className="flex items-start gap-3 pl-1">
-                    <MapPin className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-sm text-slate-400 mb-1">Theater</p>
-                      <p className="text-white font-medium">{movie.theater_name}</p>
-                    </div>
-                  </div>
-                )}
-
-                {movie.date && (
-                  <div className="flex items-start gap-3 pl-1">
-                    <Calendar className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-sm text-slate-400 mb-1">Date</p>
-                      <p className="text-white font-medium">{movie.date}</p>
-                    </div>
-                  </div>
-                )}
-
-                {movie.showtimes && movie.showtimes.length > 0 && (
-                  <div className="flex items-start gap-3 pl-1">
-                    <Clock className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                    <div className="flex-1">
-                      <p className="text-sm text-slate-400 mb-2">Showtimes</p>
-                      <div className="flex flex-wrap gap-2">
-                        {movie.showtimes.map((time, idx) => (
-                          <span
-                            key={idx}
-                            className="px-3 py-2 bg-slate-700/50 border border-slate-600 text-white text-sm font-medium rounded-lg hover:bg-red-600/20 hover:border-red-500 transition-all cursor-pointer"
-                          >
-                            {time}
+                        {movie.is_available && (
+                          <span className="px-3 py-1 bg-green-600/20 border border-green-500/50 text-green-300 text-xs font-medium rounded-full flex items-center gap-1">
+                            <Zap className="w-3 h-3" />
+                            Available
                           </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
+                        )}
 
-                {movie.seat_types && movie.seat_types.length > 0 && (
-                  <div className="flex items-start gap-3 pl-1">
-                    <Users className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                    <div className="flex-1">
-                      <p className="text-sm text-slate-400 mb-2">Seat Types</p>
-                      <div className="flex flex-wrap gap-2">
-                        {movie.seat_types.map((seat, idx) => (
-                          <span
-                            key={idx}
-                            className="px-3 py-1.5 bg-slate-700/50 border border-slate-600 text-slate-300 text-xs font-medium rounded-lg"
-                          >
-                            {seat}
+                        {!movie.is_available && (
+                          <span className="px-3 py-1 bg-red-600/20 border border-red-500/50 text-red-300 text-xs font-medium rounded-full">
+                            Sold Out
                           </span>
-                        ))}
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex-shrink-0 flex items-center">
+                      <div className="text-right space-y-1">
+                        <div className="text-red-400 font-bold text-lg">{movie.price}</div>
+                        <Tag className="w-5 h-5 text-slate-600 group-hover:text-red-500 transition-colors" />
                       </div>
                     </div>
                   </div>
-                )}
-
-                {movie.prices && Object.keys(movie.prices).length > 0 && (
-                  <div className="flex items-start gap-3 pl-1">
-                    <DollarSign className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                    <div className="flex-1">
-                      <p className="text-sm text-slate-400 mb-2">Pricing</p>
-                      <div className="grid grid-cols-2 gap-2">
-                        {Object.entries(movie.prices).map(([type, price]) => (
-                          <div
-                            key={type}
-                            className="px-3 py-2 bg-slate-700/30 border border-slate-600 rounded-lg"
-                          >
-                            <p className="text-xs text-slate-400">{type}</p>
-                            <p className="text-white font-semibold">₹{price}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {movie.available_seats !== undefined && (
-                  <div className="flex items-center gap-3 pl-1 pt-2 border-t border-slate-700/50">
-                    <Users className="w-5 h-5 text-red-500 flex-shrink-0" />
-                    <div>
-                      <p className="text-sm text-slate-400">Available Seats</p>
-                      <p className="text-white font-semibold text-lg">{movie.available_seats}</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

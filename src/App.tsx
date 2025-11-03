@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import ChatPanel from './components/ChatPanel';
 import OutputPanel from './components/OutputPanel';
+import MovieDetailPage from './pages/MovieDetailPage';
 import { api } from './services/api';
-import { ChatMessage, MovieInfo } from './types/api';
+import { ChatMessage, MovieShowResult } from './types/api';
 import { AlertCircle } from 'lucide-react';
 
-function App() {
+function ChatInterface() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [outputData, setOutputData] = useState<MovieInfo[]>([]);
+  const [outputData, setOutputData] = useState<MovieShowResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [healthStatus, setHealthStatus] = useState<'checking' | 'online' | 'offline'>('checking');
 
@@ -48,8 +50,8 @@ function App() {
 
       setMessages((prev) => [...prev, botMessage]);
 
-      if (response.data && response.data.length > 0) {
-        setOutputData(response.data);
+      if (response.data && response.data.results && response.data.results.length > 0) {
+        setOutputData(response.data.results);
       }
     } catch (error) {
       const errorMessage: ChatMessage = {
@@ -91,6 +93,15 @@ function App() {
         </div>
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<ChatInterface />} />
+      <Route path="/movie/:id" element={<MovieDetailPage />} />
+    </Routes>
   );
 }
 
