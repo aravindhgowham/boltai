@@ -68,9 +68,9 @@ function ChatInterface() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-slate-900">
+    <div className="h-screen flex flex-col bg-white">
       {healthStatus === 'offline' && (
-        <div className="bg-red-600/90 backdrop-blur-sm text-white px-4 py-3 flex items-center justify-center gap-2 text-sm border-b border-red-500/50">
+        <div className="bg-purple-600/90 backdrop-blur-sm text-white px-4 py-3 flex items-center justify-center gap-2 text-sm border-b border-purple-500/50">
           <AlertCircle className="w-4 h-4" />
           <span>
             API is offline. Please ensure your FastAPI server is running at{' '}
@@ -80,7 +80,7 @@ function ChatInterface() {
       )}
 
       <div className="flex-1 flex overflow-hidden">
-        <div className="w-[60%] border-r border-slate-700/50">
+        <div className="w-[60%] border-r border-purple-200/50">
           <ChatPanel
             messages={messages}
             onSendMessage={handleSendMessage}
