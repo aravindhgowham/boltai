@@ -83,16 +83,16 @@ export default function ChatPanel({ messages, onSendMessage, isLoading }: ChatPa
             className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} animate-fadeIn`}
           >
             <div
-              className={`max-w-[80%] rounded-2xl px-5 py-3 shadow-lg ${
+              className={`max-w-[80%] rounded-xl p-4 shadow-md ${
                 message.sender === 'user'
                   ? 'bg-gradient-to-br from-purple-600 to-purple-700 text-white'
-                  : 'bg-purple-100 text-gray-900 border border-purple-200'
+                  : 'bg-white text-gray-900 border border-gray-200'
               }`}
             >
               <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.text}</p>
               <p
                 className={`text-xs mt-2 ${
-                  message.sender === 'user' ? 'text-purple-200' : 'text-gray-600'
+                  message.sender === 'user' ? 'text-purple-200' : 'text-gray-500'
                 }`}
               >
                 {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -103,7 +103,7 @@ export default function ChatPanel({ messages, onSendMessage, isLoading }: ChatPa
 
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-purple-100 text-gray-900 rounded-2xl px-5 py-3 shadow-lg border border-purple-200">
+            <div className="bg-white text-gray-900 rounded-xl p-4 shadow-md border border-gray-200">
               <div className="flex items-center gap-2">
                 <div className="flex gap-1">
                   <span className="w-2 h-2 bg-purple-600 rounded-full animate-bounce"></span>
@@ -120,22 +120,24 @@ export default function ChatPanel({ messages, onSendMessage, isLoading }: ChatPa
       </div>
 
       <div className="p-6 border-t border-purple-200/50 bg-gray-50">
-        <form onSubmit={handleSubmit} className="flex gap-3 items-end">
+        <form onSubmit={handleSubmit} className="flex gap-2 items-end">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type your message..."
             disabled={isLoading}
-            className="flex-1 px-4 py-3 bg-white border border-purple-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all disabled:opacity-50"
+            className="flex-1 min-w-0 px-4 py-3 bg-white border border-purple-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all disabled:opacity-50 text-sm"
           />
-          {messages.length > 0 && (
-            <VoiceInput onTranscript={handleVoiceInput} isLoading={isLoading} />
-          )}
+          <div className="flex-shrink-0">
+            {messages.length > 0 && (
+              <VoiceInput onTranscript={handleVoiceInput} isLoading={isLoading} />
+            )}
+          </div>
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
-            className="px-6 py-3 bg-gradient-to-br from-purple-600 to-purple-700 text-white rounded-xl font-medium hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-purple-500/30"
+            className="flex-shrink-0 px-4 py-3 bg-gradient-to-br from-purple-600 to-purple-700 text-white rounded-xl font-medium hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-purple-500/30"
           >
             <Send className="w-5 h-5" />
           </button>
