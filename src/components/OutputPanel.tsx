@@ -9,6 +9,9 @@ interface OutputPanelProps {
 export default function OutputPanel({ data }: OutputPanelProps) {
   const navigate = useNavigate();
 
+  console.log("Data: ",data)
+
+
   if (data.length === 0) {
     return (
       <div className="h-full bg-gradient-to-br from-gray-50 to-purple-50 flex items-center justify-center p-6">
@@ -33,7 +36,7 @@ export default function OutputPanel({ data }: OutputPanelProps) {
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Available Shows</h2>
           <p className="text-gray-600 text-sm">
-            {data.length} {data.length === 1 ? 'show' : 'shows'} found · Click to view details
+            {data.length} {data.length === 1 ? 'show' : 'shows'} found
           </p>
         </div>
 

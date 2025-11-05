@@ -54,23 +54,23 @@ export default function ChatPanel({ messages, onSendMessage, isLoading }: ChatPa
           <div className="flex items-center justify-center h-full">
             <div className="text-center space-y-6">
               <div className="inline-block p-4 bg-purple-100 rounded-full">
-                <Film className="w-12 h-12 text-purple-600" />
+                {/* <Film className="w-12 h-12 text-purple-600" /> */}
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-2">Welcome!</h2>
-                <p className="text-gray-600 max-w-md">
-                  Ask me about movies playing in your area, showtimes, or book tickets.
-                </p>
+                {/* <h2 className="text-xl font-semibold text-gray-900 mb-2">Welcome!</h2> */}
+                {/* <p className="text-gray-600 max-w-md"> */}
+                  {/* Ask me about movies playing in your area, showtimes, or book tickets. */}
+                {/* </p> */}
               </div>
               <div className="space-y-3">
-                <p className="text-sm text-gray-700 font-medium">Try asking:</p>
+                {/* <p className="text-sm text-gray-700 font-medium">Try asking:</p> */}
                 <div className="space-y-2">
-                  <p className="text-gray-600 text-sm">"Show me movies in Coimbatore"</p>
-                  <p className="text-gray-600 text-sm">"Book tickets for Leo at 7 PM"</p>
+                  {/* <p className="text-gray-600 text-sm">"Show me movies in Coimbatore"</p> */}
+                  {/* <p className="text-gray-600 text-sm">"Book tickets for Leo at 7 PM"</p> */}
                 </div>
               </div>
               <div className="pt-4">
-                <p className="text-xs text-gray-500 mb-3">Or use voice:</p>
+                {/* <p className="text-xs text-gray-500 mb-3">Or use voice:</p> */}
                 <VoiceInput onTranscript={handleVoiceInput} isLoading={isLoading} />
               </div>
             </div>
@@ -127,7 +127,7 @@ export default function ChatPanel({ messages, onSendMessage, isLoading }: ChatPa
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type your message..."
             disabled={isLoading}
-            className="flex-1 px-4 py-3 bg-white border border-purple-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all disabled:opacity-50"
+            className="flex-1 px-5 py-3 bg-white border border-purple-400 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all disabled:opacity-50"
           />
           <VoiceInput onTranscript={handleVoiceInput} isLoading={isLoading} />
           <button
