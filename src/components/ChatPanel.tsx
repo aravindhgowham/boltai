@@ -129,7 +129,9 @@ export default function ChatPanel({ messages, onSendMessage, isLoading }: ChatPa
             disabled={isLoading}
             className="flex-1 px-5 py-3 bg-white border border-purple-400 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all disabled:opacity-50"
           />
-          <VoiceInput onTranscript={handleVoiceInput} isLoading={isLoading} />
+          {messages.length > 0 && (
+            <VoiceInput onTranscript={handleVoiceInput} isLoading={isLoading} />
+          )}
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
