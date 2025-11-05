@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, Film } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { ChatMessage } from '../types/api';
 import VoiceInput from './VoiceInput';
 
@@ -12,6 +13,7 @@ interface ChatPanelProps {
 export default function ChatPanel({ messages, onSendMessage, isLoading }: ChatPanelProps) {
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -90,6 +92,23 @@ export default function ChatPanel({ messages, onSendMessage, isLoading }: ChatPa
               }`}
             >
               <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.text}</p>
+              {message.sender === 'bot' && message.text.toLowerCase().includes('book') && (
+                <button
+                  onClick={() =>
+                    navigate('/booking', {
+                      state: {
+                        movieName: 'Avatar: The Way of Water',
+                        theater: 'INOX - Forum Mall',
+                        showtime: '7:00 PM',
+                        price: 250,
+                      },
+                    })
+                  }
+                  className="mt-3 px-4 py-2 bg-purple-600 text-white rounded-lg text-xs font-medium hover:bg-purple-700 transition-colors"
+                >
+                  Book Now
+                </button>
+              )}
               <p
                 className={`text-xs mt-2 ${
                   message.sender === 'user' ? 'text-purple-200' : 'text-gray-500'

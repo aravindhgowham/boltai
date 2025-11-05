@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import ChatPanel from './components/ChatPanel';
 import OutputPanel from './components/OutputPanel';
 import MovieDetailPage from './pages/MovieDetailPage';
+import BookingPage from './pages/BookingPage';
 import { api } from './services/api';
 import { ChatMessage, MovieShowResult } from './types/api';
 import { AlertCircle } from 'lucide-react';
@@ -101,6 +102,7 @@ function App() {
     <Routes>
       <Route path="/" element={<ChatInterface />} />
       <Route path="/movie/:id" element={<MovieDetailPage />} />
+      <Route path="/booking" element={<BookingPage />} />
     </Routes>
   );
 }
